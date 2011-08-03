@@ -5,7 +5,7 @@ require "data_sampler/version"
 Gem::Specification.new do |s|
   s.name        = "data_sampler"
   s.version     = DataSampler::VERSION
-  s.authors     = ["Christian Rishøj"]
+  s.authors     = ["Christian Rishoj"]
   s.email       = ["christian@rishoj.net"]
   s.homepage    = "https://github.com/crishoj/data_sampler"
   s.summary     = %q{Extract a sample of records from a database while maintaining referential integrity.}
@@ -22,4 +22,5 @@ take care that referential dependencies are fulfilled by recursively fetching an
 
   s.add_dependency "schema_plus"
   s.add_dependency "activerecord"
+  s.add_dependency "commander"
 end
