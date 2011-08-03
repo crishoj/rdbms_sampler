@@ -8,8 +8,10 @@ Gem::Specification.new do |s|
   s.authors     = ["Christian Rishøj"]
   s.email       = ["christian@rishoj.net"]
   s.homepage    = "https://github.com/crishoj/data_sampler"
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Extract a sample of records from a database while maintaining referential integrity.}
+  s.description = %q{Ever found yourself wanting a modest amount of fresh rows from a production database for development purposes, but
+put back by the need to maintain referential integrity in the extracted data sample? This data sampler utility will
+take care that referential dependencies are fulfilled by recursively fetching any rows referred to by the sample.}
 
   s.rubyforge_project = "data_sampler"
 
