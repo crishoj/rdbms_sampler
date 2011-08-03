@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+require "data_sampler"
+require "commander/import"
+require "logger"
+
+program :version, DataSampler::VERSION
+program :description, 'Extract a sample of desired size from a database while ensuring referential integrity.'
+default_command :sample
+
+command :sample do |c|
+  c.description = 'Extract a sample from the given connection'
+  c.option '--adapter NAME', String, 'ActiveRecord adapter to use'
+  c.option '--database NAME', String, 'Name of database to sample'
+  c.option '--username USER', String, 'Username for connection'
+  c.option '--password PASSWORD', String, 'Password for connection'
+  c.option '--encoding ENCODING', String, 'Encoding for connection'
+  c.option '--socket PATH', String, 'Socket for connection'
+  c.option '--rows NUM', Integer, 'Number of rows to sample per table'
+  c.option '--log PATH', String, 'Log queries to PATH'
+  c.when_called do |args, options|
+    options.default \
+      :adapter  => 'mysql',
+      :database => 'test',
+      :username => 'root',
+      :encoding => 'utf8',
+      :socket   => '/opt/local/var/run/mysql5/mysqld.sock',
+      :rows     => 1000
+    ActiveRecord::Base.logger = Logger.new(options.log) if options.log
+    ActiveRecord::Base.establish_connection(options.__hash__).with_connection do |conn|
+      puts DataSampler::Sample.new(conn, options.rows).to_sql
+    end
+  end
+end
+
