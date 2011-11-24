@@ -69,7 +69,11 @@ module DataSampler
         quoted_cols = @sample.first.keys.collect { |col| @connection.quote_column_name col }
         sql = "INSERT INTO #{@connection.quote_table_name @table_name} (#{quoted_cols * ','})"
         @sample.each do |row|
-          quoted_vals = row.values.collect { |val| @connection.quote val }
+          quoted_vals = []
+          row.each_pair do |field,val|
+            val.gsub! /./, '*' if field.downcase == 'password'
+            quoted_vals << @connection.quote(val)
+          end
           ret << sql + " VALUES (#{quoted_vals * ','})"
         end
       end
