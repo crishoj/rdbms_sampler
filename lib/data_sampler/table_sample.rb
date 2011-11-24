@@ -74,7 +74,7 @@ module DataSampler
             val.gsub! /./, '*' if field.downcase == 'password'
             quoted_vals << @connection.quote(val)
           end
-          ret << sql + " VALUES (#{quoted_vals * ','})"
+          ret << sql + " VALUES (#{quoted_vals * ','});"
         end
       end
       ret * "\n"
