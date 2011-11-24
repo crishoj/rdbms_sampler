@@ -58,6 +58,7 @@ module DataSampler
       deps_in_progress = @pending_dependencies
       @pending_dependencies = Set.new
       deps_in_progress.each do |dependency|
+        raise "Table sample for #{dependency.table_name} not found" unless table_samples[dependency.table_name]
         any_new = true if table_samples[dependency.table_name].fulfil(dependency)
       end
       any_new
@@ -83,6 +84,7 @@ module DataSampler
     protected
 
     def fetch_sample(count)
+      warn "  Sampling #{count} rows from #{@table_name}"
       sql = "SELECT * FROM #{@connection.quote_table_name @table_name}"
       pk = @connection.primary_key(@table_name)
       sql += " ORDER BY #{@connection.quote_column_name pk} DESC" unless pk.nil?

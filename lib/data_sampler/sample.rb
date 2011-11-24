@@ -14,7 +14,7 @@ module DataSampler
     def compute!
       @connection.tables.each do |table_name|
         # Workaround for inconsistent casing in table definitions (http://bugs.mysql.com/bug.php?id=60773)
-        table_name.downcase!
+        # table_name.downcase!
         @table_samples[table_name] = TableSample.new(@connection, table_name, @rows_per_table)
       end
       warn "Sampling #{@table_samples.count} tables..."
@@ -23,11 +23,14 @@ module DataSampler
       begin
         new_dependencies = 0
         @table_samples.values.each do |table_sample|
-          new_dependencies += 1 if table_sample.ensure_referential_integrity(@table_samples)
+          if table_sample.ensure_referential_integrity(@table_samples)
+            new_dependencies += 1 
+            warn "  Found new dependents for #{table_sample.table_name}"
+          end
         end
-        warn " - discovered #{new_dependencies} new dependencies" if new_dependencies > 0
+        warn " Discovered #{new_dependencies} new dependencies" if new_dependencies > 0
       end while new_dependencies > 0
-      warn " - referential integrity obtained"
+      warn "Referential integrity obtained"
       @computed = true
     end
 
