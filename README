@@ -1,7 +1,11 @@
 
-Ever found yourself wanting a modest amount of fresh rows from a production database for development purposes, but
-put back by the need to maintain referential integrity in the extracted data sample? This data sampler utility will
-take care that referential dependencies are fulfilled by recursively fetching any rows referred to by the sample.
+Ever found yourself wanting a modest amount of fresh rows from a production database
+for development purposes, but put back by the need to maintain referential integrity
+in the extracted data sample?
+
+This data sampling utility will take care that referential dependencies are
+fulfilled by recursively expanding the sample with unfilled dependencies until
+the sample is referentially consistent.
 
   COMMANDS:
 
