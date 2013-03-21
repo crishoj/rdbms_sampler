@@ -23,7 +23,6 @@ command :sample do |c|
       :database => 'test',
       :username => 'root',
       :encoding => 'utf8',
-      :socket   => '/opt/local/var/run/mysql5/mysqld.sock',
       :rows     => 1000
     ActiveRecord::Base.logger = Logger.new(options.log) if options.log
     ActiveRecord::Base.establish_connection(options.__hash__).with_connection do |conn|
