@@ -14,7 +14,7 @@ module DataSampler
     end
 
     def to_s
-      "#{keys} in table #{table_name}"
+      "#{keys} in table `#{table_name}`"
     end
 
   end

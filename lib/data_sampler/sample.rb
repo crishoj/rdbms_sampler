@@ -17,7 +17,7 @@ module DataSampler
         # table_name.downcase!
         @table_samples[table_name] = TableSample.new(@connection, table_name, @rows_per_table)
       end
-      warn "Sampling #{@table_samples.count} tables..."
+      warn "Sampling #{@table_samples.count} tables from database `#{@connection.current_database}`..."
       @table_samples.values.map &:sample!
       warn "Ensuring referential integrity..."
       begin
@@ -25,7 +25,7 @@ module DataSampler
         @table_samples.values.each do |table_sample|
           if table_sample.ensure_referential_integrity(@table_samples)
             new_dependencies += 1 
-            warn "  Found new dependents for #{table_sample.table_name}"
+            warn "  Found new dependents for table `#{table_sample.table_name}`"
           end
         end
         warn " Discovered #{new_dependencies} new dependencies" if new_dependencies > 0

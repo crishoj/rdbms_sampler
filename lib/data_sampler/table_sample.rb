@@ -84,7 +84,7 @@ module DataSampler
     protected
 
     def fetch_sample(count)
-      warn "  Sampling #{count} rows from #{@table_name}"
+      warn "  Sampling #{count} rows from table `#{@table_name}`"
       sql = "SELECT * FROM #{@connection.quote_table_name @table_name}"
       pk = @connection.primary_key(@table_name)
       sql += " ORDER BY #{@connection.quote_column_name pk} DESC" unless pk.nil?
