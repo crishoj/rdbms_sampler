@@ -26,7 +26,9 @@ module DataSampler
       return if fulfilled?(dependency)
       where = dependency.keys.collect { |col, val| "#{@connection.quote_column_name col} = #{@connection.quote val}" } * ' AND '
       sql = "SELECT * FROM #{@connection.quote_table_name @table_name} WHERE " + where
-      add @connection.select_one(sql)
+      row = @connection.select_one(sql)
+      raise "Dependent row not found for #{dependency} (using SQL: #{sql})" if row.nil?
+      add row
     end
 
     def fulfilled?(dependency)
