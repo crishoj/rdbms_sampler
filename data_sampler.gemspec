@@ -23,4 +23,7 @@ take care that referential dependencies are fulfilled by recursively fetching an
   s.add_dependency "schema_plus"
   s.add_dependency "activerecord"
   s.add_dependency "commander"
+  s.add_dependency "mysql"
+
+  s.add_development_dependency "pry"
 end
