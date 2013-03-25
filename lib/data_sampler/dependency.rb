@@ -16,7 +16,7 @@ module DataSampler
     end
 
     def to_s
-      "#{keys} in table `#{table_name}` (referred from `#{referring_table_name}`)"
+      "row with keys #{keys} in table `#{table_name}` (referred from `#{referring_table_name}`)"
     end
 
   end

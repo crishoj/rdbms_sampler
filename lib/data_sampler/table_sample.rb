@@ -23,11 +23,11 @@ module DataSampler
     end
 
     def fulfil(dependency)
-      return if fulfilled?(dependency)
+      return 0 if fulfilled?(dependency)
       where = dependency.keys.collect { |col, val| "#{@connection.quote_column_name col} = #{@connection.quote val}" } * ' AND '
       sql = "SELECT * FROM #{@connection.quote_table_name @table_name} WHERE " + where
       row = @connection.select_one(sql)
-      raise "Could not find dependent row: #{dependency} (using SQL: #{sql})" if row.nil?
+      raise "Could not find #{dependency}" if row.nil?
       add row
     end
 
@@ -44,26 +44,26 @@ module DataSampler
     end
 
     def add(row)
-      return false unless @sample.add? row
+      return 0 unless @sample.add? row
       @sampled_ids.add row['id'] if row['id']
-      any_new = false
+      newly_added = 0
       dependencies_for(row).each do |dep|
-        any_new = true if @pending_dependencies.add?(dep)
+        newly_added += 1 if @pending_dependencies.add?(dep)
       end
-      any_new
+      newly_added
     rescue ActiveRecord::StatementInvalid => e
       # Don't choke on unknown table engines, such as Sphinx
     end
 
     def ensure_referential_integrity(table_samples)
-      any_new = false
+      newly_added = 0
       deps_in_progress = @pending_dependencies
       @pending_dependencies = Set.new
       deps_in_progress.each do |dependency|
         raise "Table sample for #{dependency.table_name} not found" unless table_samples[dependency.table_name]
-        any_new = true if table_samples[dependency.table_name].fulfil(dependency)
+        newly_added += table_samples[dependency.table_name].fulfil(dependency)
       end
-      any_new
+      newly_added
     end
 
     def to_sql
