@@ -22,6 +22,10 @@ module DataSampler
       @sample
     end
 
+    def size
+      @sampled ? @sample.size : @size
+    end
+
     def fulfil(dependency)
       return 0 if fulfilled?(dependency)
       where = dependency.keys.collect { |col, val| "#{@connection.quote_column_name col} = #{@connection.quote val}" } * ' AND '
@@ -60,7 +64,7 @@ module DataSampler
       deps_in_progress = @pending_dependencies
       @pending_dependencies = Set.new
       deps_in_progress.each do |dependency|
-        raise "Table sample for #{dependency.table_name} not found" unless table_samples[dependency.table_name]
+        raise "Table sample for `#{dependency.table_name}` not found" unless table_samples[dependency.table_name]
         newly_added += table_samples[dependency.table_name].fulfil(dependency)
       end
       newly_added
@@ -96,6 +100,7 @@ module DataSampler
       sql += " ORDER BY #{@connection.quote_column_name pk} DESC" unless pk.nil?
       sql += " LIMIT #{count}"
       @connection.select_all(sql).each { |row| add(row) }
+      @sampled = true
     rescue ActiveRecord::StatementInvalid => e
       # Don't choke on unknown table engines, such as Sphinx
       []

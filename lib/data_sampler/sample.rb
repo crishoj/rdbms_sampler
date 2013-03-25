@@ -32,6 +32,11 @@ module DataSampler
         warn " Discovered #{new_dependencies} new dependencies" if new_dependencies > 0
       end while new_dependencies > 0
       warn "Referential integrity obtained"
+
+      warn "Final sample contains:"
+      @table_samples.values.each do |table_sample|
+        warn "  #{table_sample.size} row(s) from `#{table_sample.table_name}`"
+      end
       @computed = true
     end
 
