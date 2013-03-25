@@ -67,20 +67,24 @@ module DataSampler
     end
 
     def to_sql
-      ret = ["-- #{@table_name}: #{@sample.count} rows"]
+      ret = "-- #{@table_name}: #{@sample.count} rows\n"
       unless @sample.empty?
         quoted_cols = @sample.first.keys.collect { |col| @connection.quote_column_name col }
-        sql = "INSERT INTO #{@connection.quote_table_name @table_name} (#{quoted_cols * ','})"
-        @sample.each do |row|
-          quoted_vals = []
-          row.each_pair do |field,val|
-            val.gsub! /./, '*' if field.downcase == 'password'
-            quoted_vals << @connection.quote(val)
-          end
-          ret << sql + " VALUES (#{quoted_vals * ','});"
+        # INSERT in batches of 1000
+        @sample.each_slice(1000) do |rows|
+          values = rows.collect { |row|
+            quoted_vals = []
+            row.each_pair do |field,val|
+              # HACK: Brute attempt at not revealing sensitive data
+              val.gsub! /./, '*' if field.downcase == 'password'
+              quoted_vals << @connection.quote(val)
+            end
+            quoted_vals * ','
+          } * '),('
+          ret << "INSERT INTO #{@connection.quote_table_name @table_name} (#{quoted_cols * ','}) VALUES (#{values});\n"
         end
       end
-      ret * "\n"
+      ret
     end
 
     protected
