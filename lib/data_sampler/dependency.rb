@@ -3,10 +3,12 @@ module DataSampler
 
     attr_reader :table_name
     attr_reader :keys
+    attr_reader :referring_table_name
 
-    def initialize(table_name, keys)
+    def initialize(table_name, keys, referring_table_name)
       @table_name = table_name
       @keys = keys
+      @referring_table_name = referring_table_name
     end
 
     def eql? other
@@ -14,7 +16,7 @@ module DataSampler
     end
 
     def to_s
-      "#{keys} in table `#{table_name}`"
+      "#{keys} in table `#{table_name}` (referred from `#{referring_table_name}`)"
     end
 
   end

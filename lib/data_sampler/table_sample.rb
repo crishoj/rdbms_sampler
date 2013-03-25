@@ -27,7 +27,7 @@ module DataSampler
       where = dependency.keys.collect { |col, val| "#{@connection.quote_column_name col} = #{@connection.quote val}" } * ' AND '
       sql = "SELECT * FROM #{@connection.quote_table_name @table_name} WHERE " + where
       row = @connection.select_one(sql)
-      raise "Dependent row not found for #{dependency} (using SQL: #{sql})" if row.nil?
+      raise "Could not find dependent row: #{dependency} (using SQL: #{sql})" if row.nil?
       add row
     end
 
@@ -110,7 +110,7 @@ module DataSampler
         col = cols.shift
         ref[ref_col] = row[col] unless row[col].nil?
       end
-      Dependency.new(fk.references_table_name, ref) unless ref.empty?
+      Dependency.new(fk.references_table_name, ref, table_name) unless ref.empty?
     end
 
     def dependencies_for(row)
