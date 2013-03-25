@@ -26,7 +26,7 @@ module DataSampler
           newly_added = table_sample.ensure_referential_integrity(@table_samples)
           if newly_added > 0
             new_dependencies += newly_added
-            warn "  Found #{newly_added} new dependents for table `#{table_sample.table_name}`"
+            warn "  Found #{newly_added} new dependencies for table `#{table_sample.table_name}`"
           end
         end
         warn " Discovered #{new_dependencies} new dependencies" if new_dependencies > 0
