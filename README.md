@@ -59,7 +59,7 @@ GLOBAL OPTIONS
 USAGE
 -----
 
-  data_sampler --database SOME_LEGACY_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
+    data_sampler --database SOME_LEGACY_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
 
 CAVEATS
 -------
