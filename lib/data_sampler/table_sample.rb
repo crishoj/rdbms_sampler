@@ -113,13 +113,13 @@ module DataSampler
 
     def dependency_for(fk, row)
       ref = {}
-      cols = fk.column_names.dup
+      cols = Array.wrap(fk.column)
       raise "No column names in foreign key #{fk.inspect}" if cols.empty?
-      fk.references_column_names.each do |ref_col|
+      Array.wrap(fk.primary_key).each do |ref_col|
         col = cols.shift
         ref[ref_col] = row[col] unless row[col].nil?
       end
-      Dependency.new(fk.references_table_name, ref, table_name) unless ref.empty?
+      Dependency.new(fk.to_table, ref, table_name) unless ref.empty?
     end
 
     def dependencies_for(row)

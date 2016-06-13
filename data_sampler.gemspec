@@ -20,7 +20,7 @@ take care that referential dependencies are fulfilled by recursively fetching an
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "schema_plus"
+  s.add_dependency "schema_plus_foreign_keys"
   s.add_dependency "activerecord"
   s.add_dependency "commander"
   s.add_dependency "mysql"
