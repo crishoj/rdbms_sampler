@@ -1,18 +1,24 @@
+data_sampler
+============
 
-Ever found yourself wanting a modest amount of fresh rows from a production database
-for development purposes, but put back by the need to maintain referential integrity
-in the extracted data sample?
+A Ruby command line utility for extracting a sample of records from a relational 
+database system (such as MySQL) while *maintaining referential integrity* in the sample. 
 
-This data sampling utility will take care that referential dependencies are
-fulfilled by recursively expanding the sample with unfilled dependencies until
+Need e.g. 1000 rows from each of your production tables, but feel the pain of making 
+sure to include dependent rows, their dependents and so on, ad infinitum?
+
+Look no further. This tiny utility will take care that referential dependencies are
+fulfilled by recursively expanding the row sample with unfilled dependencies until
 the sample is referentially consistent.
 
-  COMMANDS:
+COMMANDS
+--------
 
     help                 Display global or [command] help documentation.
     sample               Extract a sample from the given connection
 
-  OPTIONS:
+OPTIONS
+-------
 
     --adapter NAME
         ActiveRecord adapter to use
@@ -38,7 +44,8 @@ the sample is referentially consistent.
     --log PATH
         Log queries to PATH
 
-  GLOBAL OPTIONS:
+GLOBAL OPTIONS
+--------------
 
     -h, --help
         Display help documentation
@@ -49,3 +56,13 @@ the sample is referentially consistent.
     -t, --trace
         Display backtrace when an error occurs
 
+USAGE
+-----
+
+  data_sampler --database SOME_LEGACY_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
+
+CAVEATS
+-------
+
+You will probably need to disable foreign key check *during import*, since inserts in 
+the output are not ordered with respect to referential integrity.
