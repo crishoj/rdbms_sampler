@@ -20,11 +20,11 @@ command :sample do |c|
   c.option '--log PATH', String, 'Log queries to PATH'
   c.when_called do |args, options|
     options.default \
-      :adapter  => 'mysql',
+      :adapter => 'mysql2',
       :database => 'test',
       :username => 'root',
       :encoding => 'utf8',
-      :rows     => 1000
+      :rows => 1000
     ActiveRecord::Base.logger = Logger.new(options.log) if options.log
     ActiveRecord::Base.establish_connection(options.__hash__).with_connection do |conn|
       puts DataSampler::Sample.new(conn: conn, rows_per_table: options.rows, schema: options.database).to_sql
