@@ -15,7 +15,7 @@ command :sample do |c|
   c.option '--password PASSWORD', String, 'Password for connection'
   c.option '--encoding ENCODING', String, 'Encoding for connection'
   c.option '--socket PATH', String, 'Socket for connection'
-  c.option '--hostname HOST_NAME', String, 'Host name'
+  c.option '--host HOST_NAME', String, 'Host name'
   c.option '--rows NUM', Integer, 'Number of rows to sample per table'
   c.option '--log PATH', String, 'Log queries to PATH'
   c.when_called do |args, options|

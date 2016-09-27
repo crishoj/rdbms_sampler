@@ -35,8 +35,8 @@ OPTIONS
     --encoding ENCODING
         Encoding for connection
 
-    --hostname HOSTNAME
-        Host name for connection
+    --host HOST
+        Host name or IP for connection
 
     --socket PATH
         Socket for connection
