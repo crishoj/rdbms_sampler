@@ -1,5 +1,5 @@
-data_sampler
-============
+`data_sampler`
+==============
 
 A Ruby command line utility for extracting a sample of records from a relational 
 database system (such as MySQL) while *maintaining referential integrity* in the sample. 
@@ -34,6 +34,9 @@ OPTIONS
 
     --encoding ENCODING
         Encoding for connection
+
+    --hostname HOSTNAME
+        Host name for connection
 
     --socket PATH
         Socket for connection
