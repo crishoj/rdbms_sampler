@@ -62,7 +62,7 @@ GLOBAL OPTIONS
 USAGE
 -----
 
-    rdbms_sampler --database SOME_LEGACY_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
+    rdbms_sampler --database SOME_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
 
 CAVEATS
 -------
