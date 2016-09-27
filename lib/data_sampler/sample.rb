@@ -7,7 +7,7 @@ module DataSampler
     #def initialize(connection, rows_per_table = 1000, database = 'test')
     def initialize(options ={})
       @connection = options[:conn]
-      @rows_per_table = options[:rows_per_table]
+      @rows_per_table = options[:rows_per_table] || 1000
       @table_samples = {}
       @schema = options[:schema]
       @computed = false
