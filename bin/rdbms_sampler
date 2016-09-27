@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require "data_sampler"
+require "rdbms_sampler"
 require "commander/import"
 require "logger"
 

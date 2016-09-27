@@ -1,4 +1,4 @@
-require "data_sampler/table_sample"
+require "rdbms_sampler/table_sample"
 
 module DataSampler
 

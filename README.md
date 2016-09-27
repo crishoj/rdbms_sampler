@@ -1,4 +1,4 @@
-`data_sampler`
+`RDBMS Sampler`
 ==============
 
 A Ruby command line utility for extracting a sample of records from a relational 
@@ -62,7 +62,7 @@ GLOBAL OPTIONS
 USAGE
 -----
 
-    data_sampler --database SOME_LEGACY_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
+    rdbms_sampler --database SOME_LEGACY_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
 
 CAVEATS
 -------

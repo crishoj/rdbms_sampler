@@ -1,4 +1,4 @@
-require "data_sampler/dependency"
+require "rdbms_sampler/dependency"
 
 module DataSampler
 
