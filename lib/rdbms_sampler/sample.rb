@@ -13,14 +13,14 @@ module DataSampler
     end
 
     def compute!
-
-      tables_without_views(@schema).each  do |table_name|
+      warn "Discovering tables in database `#{@schema}`..."
+      tables_without_views.each do |table_name|
         table_name = table_name.first
         # Workaround for inconsistent casing in table definitions (http://bugs.mysql.com/bug.php?id=60773)
         # table_name.downcase!
         @table_samples[table_name] = TableSample.new(@connection, table_name, @rows_per_table)
       end
-      warn "Sampling #{@table_samples.count} tables from database `#{@connection.current_database}`..."
+      warn "Sampling #{@table_samples.count} tables..."
       @table_samples.values.map &:sample!
       warn "Ensuring referential integrity..."
       begin
@@ -50,9 +50,8 @@ module DataSampler
 
     private
 
-    # fetch table_names from db without views
-    def tables_without_views(table_schema )
-      sql =  "SELECT TABLE_NAME  FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = #{@connection.quote(table_schema)}"
+    def tables_without_views
+      sql = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = #{@connection.quote(@schema)}"
       @connection.execute(sql)
     end
   end
