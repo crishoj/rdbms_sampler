@@ -15,6 +15,7 @@ command :sample do |c|
   c.option '--password PASSWORD', String, 'Password for connection'
   c.option '--encoding ENCODING', String, 'Encoding for connection'
   c.option '--socket PATH', String, 'Socket for connection'
+  c.option '--hostname HOST_NAME', String, 'Host name'
   c.option '--rows NUM', Integer, 'Number of rows to sample per table'
   c.option '--log PATH', String, 'Log queries to PATH'
   c.when_called do |args, options|
@@ -26,7 +27,7 @@ command :sample do |c|
       :rows     => 1000
     ActiveRecord::Base.logger = Logger.new(options.log) if options.log
     ActiveRecord::Base.establish_connection(options.__hash__).with_connection do |conn|
-      puts DataSampler::Sample.new(conn, options.rows).to_sql
+      puts DataSampler::Sample.new(conn: conn, rows_per_table: options.rows, schema: options.database).to_sql
     end
   end
 end
