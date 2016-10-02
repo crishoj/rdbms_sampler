@@ -73,7 +73,7 @@ module RdbmsSampler
     end
 
     def to_sql
-      ret = ('-' * 80) + "\n-- Sample from #{quoted_name} (#{@sample.count} rows)\n" + ('-' * 80) + "\n"
+      ret = "\n-- Sample from #{quoted_name} (#{@sample.count} rows)\n"
       unless @sample.empty?
         quoted_cols = @sample.first.keys.collect { |col| @connection.quote_column_name col }
         # INSERT in batches to reduce the likelihood of hitting `max_allowed_packet`
