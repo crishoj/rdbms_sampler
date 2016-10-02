@@ -1,8 +1,11 @@
 `RDBMS Sampler`
 ==============
 
-A Ruby command line utility for extracting a sample of records from a relational 
+Command line utility for extracting a sample (subset of all records) from a relational 
 database system (such as MySQL) while *maintaining referential integrity* in the sample. 
+
+DESCRIPTION
+-----------
 
 Need e.g. 1000 rows from each of your production tables, but feel the pain of making 
 sure to include dependent rows, their dependents and so on, ad infinitum?
@@ -14,8 +17,8 @@ the sample is referentially consistent.
 COMMANDS
 --------
 
-    help                 Display global or [command] help documentation.
-    sample               Extract a sample from the given connection
+    help        Display global or [command] help documentation.
+    sample      Extract a sample from the given connection
 
 OPTIONS
 -------
@@ -23,8 +26,8 @@ OPTIONS
     --adapter NAME
         ActiveRecord adapter to use
 
-    --database NAME
-        Name of database to sample
+    --databases NAMES
+        Comma-separated list of databases to sample
 
     --username USER
         Username for connection
@@ -62,10 +65,17 @@ GLOBAL OPTIONS
 USAGE
 -----
 
-    rdbms_sampler --database SOME_DB --username MY_USER --password MY_PASS --rows 100 > sample.sql
+    rdbms_sampler --databases DB1,DB2 --username USER --password PASS --rows 100 > sample.sql
+
+
 
 CAVEATS
 -------
+
+Only single-column foreign keys are currently handled. 
+
+Additionally, due to a bug in the current implementation, if a referenced column 
+is named anything but `id`, referenced rows might get included multiple times.
 
 You will probably need to disable foreign key check *during import*, since inserts in 
 the output are not ordered with respect to referential integrity.
