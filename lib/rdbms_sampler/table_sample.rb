@@ -76,8 +76,8 @@ module RdbmsSampler
       ret = ('-' * 80) + "\n-- Sample from #{quoted_name} (#{@sample.count} rows)\n" + ('-' * 80) + "\n"
       unless @sample.empty?
         quoted_cols = @sample.first.keys.collect { |col| @connection.quote_column_name col }
-        # INSERT in batches of 1000
-        @sample.each_slice(1000) do |rows|
+        # INSERT in batches to reduce the likelihood of hitting `max_allowed_packet`
+        @sample.each_slice(250) do |rows|
           values = rows.collect { |row|
             row.values.map { |val|
               @connection.quote(val)
