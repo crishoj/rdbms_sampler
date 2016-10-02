@@ -41,7 +41,7 @@ module RdbmsSampler
 
       warn 'Final sample contains:'
       @table_samples.values.each do |table_sample|
-        warn "  #{table_sample.size} row(s) from `#{table_sample.quoted_schema_and_table}`"
+        warn "  #{table_sample.size} row(s) from `#{table_sample.identifier}`"
       end
       @computed = true
     end
