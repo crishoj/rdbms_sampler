@@ -23,6 +23,7 @@ command :sample do |c|
       :adapter => 'mysql2',
       :username => 'root',
       :encoding => 'utf8',
+      :cast => false,
       :rows => 1000
     ActiveRecord::Base.logger = Logger.new(options.log) if options.log
     warn 'Connecting...'
