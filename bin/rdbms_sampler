@@ -3,14 +3,14 @@ require "rdbms_sampler"
 require "commander/import"
 require "logger"
 
-program :version, DataSampler::VERSION
+program :version, RdbmsSampler::VERSION
 program :description, 'Extract a sample of desired size from a database while ensuring referential integrity.'
 default_command :sample
 
 command :sample do |c|
   c.description = 'Extract a sample from the given connection'
   c.option '--adapter NAME', String, 'ActiveRecord adapter to use'
-  c.option '--database NAME', String, 'Name of database to sample'
+  c.option '--databases NAMES', String, 'Comma-separated names of databases to sample'
   c.option '--username USER', String, 'Username for connection'
   c.option '--password PASSWORD', String, 'Password for connection'
   c.option '--encoding ENCODING', String, 'Encoding for connection'
@@ -21,13 +21,14 @@ command :sample do |c|
   c.when_called do |args, options|
     options.default \
       :adapter => 'mysql2',
-      :database => 'test',
       :username => 'root',
       :encoding => 'utf8',
       :rows => 1000
     ActiveRecord::Base.logger = Logger.new(options.log) if options.log
+    warn 'Connecting...'
     ActiveRecord::Base.establish_connection(options.__hash__).with_connection do |conn|
-      puts DataSampler::Sample.new(conn: conn, rows_per_table: options.rows, schema: options.database).to_sql
+      schemas = options.databases.split(/,/)
+      puts RdbmsSampler::Sample.new(conn: conn, rows_per_table: options.rows, schemas: schemas).to_sql
     end
   end
 end

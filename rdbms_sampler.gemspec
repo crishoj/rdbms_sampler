@@ -4,7 +4,7 @@ require "rdbms_sampler/version"
 
 Gem::Specification.new do |s|
   s.name        = "rdbms_sampler"
-  s.version     = DataSampler::VERSION
+  s.version     = RdbmsSampler::VERSION
   s.authors     = ["Christian Rishoj"]
   s.email       = ["christian@rishoj.net"]
   s.homepage    = "https://github.com/crishoj/rdbms_sampler"

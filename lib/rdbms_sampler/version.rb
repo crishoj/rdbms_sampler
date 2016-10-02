@@ -1,3 +1,3 @@
-module DataSampler
+module RdbmsSampler
   VERSION = "1.0.1"
 end
