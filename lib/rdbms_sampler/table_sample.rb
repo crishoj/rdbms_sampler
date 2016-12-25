@@ -96,11 +96,13 @@ module RdbmsSampler
     protected
 
     def fetch(count = 1000)
-      warn "  Sampling #{count} rows from #{quoted_name}..."
       sql = "SELECT * FROM #{quoted_name}"
-      pk = @connection.primary_key(@table)
-      sql += " ORDER BY #{@connection.quote_column_name pk} DESC" unless pk.nil?
+      unless (pks = self.primary_keys).count == 0
+        order_by = @connection.quote_column_name(pks.first)
+        sql += " ORDER BY #{order_by} DESC"
+      end
       sql += " LIMIT #{count}"
+      warn "  Sampling #{count} rows from #{quoted_name}..."
       @connection.select_all(sql).each { |row| add(row) }
       @sampled = true
     end
@@ -143,6 +145,23 @@ SQL
 
       @connection.execute(sql).map do |row|
         ForeignKey.new(*row)
+      end
+    end
+
+    def primary_keys
+      quoted_schema = @connection.quote @schema
+      quoted_table = @connection.quote @table
+
+      sql = <<SQL
+      SELECT column_name
+      FROM information_schema.key_column_usage
+      WHERE constraint_name = 'PRIMARY'
+      AND table_schema = #{quoted_schema}
+      AND table_name = #{quoted_table}
+SQL
+
+      @connection.execute(sql).map do |row|
+        row.first
       end
     end
 
