@@ -4,7 +4,7 @@ RDBMS Sampler
 Command line utility for extracting a sample (subset of all records) from a relational 
 database system (such as MySQL) while *maintaining the referential integrity* of the sample. 
 
-DESCRIPTION
+Description
 -----------
 
 Need e.g. 1000 rows from each of your production tables, but feel the pain of making 
@@ -14,13 +14,21 @@ Look no further. This tiny utility will take care that referential dependencies 
 fulfilled by recursively expanding the row sample with unfilled dependencies until
 the sample is referentially consistent.
 
-COMMANDS
+Installation
+------------
+
+    Install with `gem install rdbms_sampler`.
+    
+    Alternatively, clone the repository and install dependencies with `bundle install`. 
+    Then execute with `bundle exec rdbms_sampler ...`.
+
+Commands
 --------
 
     help        Display global or [command] help documentation.
     sample      Extract a sample from the given connection
 
-OPTIONS
+Options
 -------
 
     --adapter NAME
@@ -50,7 +58,7 @@ OPTIONS
     --log PATH
         Log queries to PATH
 
-GLOBAL OPTIONS
+Global Options
 --------------
 
     -h, --help
@@ -62,7 +70,7 @@ GLOBAL OPTIONS
     -t, --trace
         Display backtrace when an error occurs
 
-USAGE
+Usage
 -----
 
     rdbms_sampler --databases DB1,DB2 --username USER --password PASS --rows 100 > sample.sql
