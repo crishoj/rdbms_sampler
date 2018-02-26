@@ -11,6 +11,8 @@ module RdbmsSampler
       @table_samples = {}
       @schemas = options[:schemas]
       @computed = false
+      @connection.execute 'SET SESSION TRANSACTION READ ONLY, ISOLATION LEVEL REPEATABLE READ'
+      @connection.execute 'START TRANSACTION'
     end
 
     def compute!
