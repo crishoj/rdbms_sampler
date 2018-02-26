@@ -32,7 +32,7 @@ module RdbmsSampler
           newly_added = table_sample.ensure_referential_integrity(self)
           if newly_added > 0
             new_dependencies += newly_added
-            warn "  Added #{newly_added} new dependencies from table #{table_sample.quoted_name}"
+            warn "  Expanded sample with #{newly_added} new rows referenced from table #{table_sample.quoted_name}"
           end
         end
         warn " Discovered #{new_dependencies} new dependencies" if new_dependencies > 0
