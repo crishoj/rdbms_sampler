@@ -17,10 +17,10 @@ the sample is referentially consistent.
 Installation
 ------------
 
-    Install with `gem install rdbms_sampler`.
+Install with `gem install rdbms_sampler`.
     
-    Alternatively, clone the repository and install dependencies with `bundle install`. 
-    Then execute with `bundle exec rdbms_sampler ...`.
+Alternatively, clone the repository and install dependencies with `bundle install`. 
+Then execute with `bundle exec rdbms_sampler ...`.
 
 Commands
 --------
