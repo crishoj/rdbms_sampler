@@ -1,8 +1,8 @@
-`RDBMS Sampler`
-==============
+RDBMS Sampler
+=============
 
 Command line utility for extracting a sample (subset of all records) from a relational 
-database system (such as MySQL) while *maintaining referential integrity* in the sample. 
+database system (such as MySQL) while *maintaining the referential integrity* of the sample. 
 
 DESCRIPTION
 -----------
