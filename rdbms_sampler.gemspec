@@ -23,7 +23,7 @@ take care that referential dependencies are fulfilled by recursively fetching an
   s.add_dependency "schema_plus_foreign_keys", '~> 0.1', '>= 0.1.7'
   s.add_dependency "activerecord", '~> 5.0'
   s.add_dependency "commander", '~> 4.4'
-  s.add_dependency "mysql2", '~> 0.4', '>= 0.4.4'
+  s.add_dependency "mysql2", '~> 0.5'
 
   s.add_development_dependency "pry", '~> 0.9'
 end
