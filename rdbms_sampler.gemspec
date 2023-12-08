@@ -13,8 +13,6 @@ Gem::Specification.new do |s|
 put back by the need to maintain referential integrity in the extracted data sample? This data sampler utility will
 take care that referential dependencies are fulfilled by recursively fetching any rows referred to by the sample.}
 
-  s.rubyforge_project = "rdbms_sampler"
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
