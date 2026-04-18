@@ -60,6 +60,12 @@ Options
         Skipped tables are not sampled directly, but rows will still be included if
         they are referenced via foreign keys from other sampled rows.
 
+    --full-tables NAMES
+        Comma-separated list of tables (in `schema.table` form) to dump in full,
+        ignoring --rows. Useful for small config-style tables where a random sample
+        would miss critical rows (e.g. a `pages` table containing `login`, `customer`).
+        Referential integrity of rows referencing these tables is trivially satisfied.
+
     --log PATH
         Log queries to PATH
 

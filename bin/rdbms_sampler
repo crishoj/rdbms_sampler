@@ -18,6 +18,7 @@ command :sample do |c|
   c.option '--host HOST_NAME', String, 'Host name'
   c.option '--rows NUM', Integer, 'Number of rows to sample per table'
   c.option '--skip-tables NAMES', String, 'Comma-separated tables (schema.table) to skip as sample roots (still included via FK dependencies)'
+  c.option '--full-tables NAMES', String, 'Comma-separated tables (schema.table) to include in full (no row limit). Referential integrity of rows referencing them is trivially satisfied.'
   c.option '--log PATH', String, 'Log queries to PATH'
   c.when_called do |args, options|
     options.default \
@@ -28,10 +29,11 @@ command :sample do |c|
       :rows => 1000
     ActiveRecord::Base.logger = Logger.new(options.log) if options.log
     skip_tables = (options.skip_tables || '').split(/,/).map(&:strip).reject(&:empty?)
+    full_tables = (options.full_tables || '').split(/,/).map(&:strip).reject(&:empty?)
     warn 'Connecting...'
     ActiveRecord::Base.establish_connection(options.__hash__).with_connection do |conn|
       schemas = options.databases.split(/,/)
-      puts RdbmsSampler::Sample.new(conn: conn, rows_per_table: options.rows, schemas: schemas, skip_tables: skip_tables).to_sql
+      puts RdbmsSampler::Sample.new(conn: conn, rows_per_table: options.rows, schemas: schemas, skip_tables: skip_tables, full_tables: full_tables).to_sql
     end
   end
 end

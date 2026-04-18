@@ -8,11 +8,12 @@ module RdbmsSampler
 
     attr_reader :pending_dependencies
 
-    def initialize(connection, schema_name, table_name, size = 1000)
+    def initialize(connection, schema_name, table_name, size = 1000, full: false)
       @schema = schema_name
       @table = table_name
       @connection = connection
       @size = size
+      @full = full
       @pending_dependencies = Set.new
       @sample = Set.new
       @sampled = false
@@ -20,7 +21,8 @@ module RdbmsSampler
     end
 
     def sample!
-      fetch(@size) unless @sampled
+      return @sample if @sampled
+      @full ? fetch_all : fetch(@size)
       @sample
     end
 
@@ -103,6 +105,13 @@ module RdbmsSampler
       end
       sql += " LIMIT #{count}"
       warn "  Sampling #{count} rows from #{quoted_name}..."
+      @connection.select_all(sql).each { |row| add(row) }
+      @sampled = true
+    end
+
+    def fetch_all
+      sql = "SELECT * FROM #{quoted_name}"
+      warn "  Dumping all rows from #{quoted_name}..."
       @connection.select_all(sql).each { |row| add(row) }
       @sampled = true
     end

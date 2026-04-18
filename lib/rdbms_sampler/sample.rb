@@ -11,6 +11,7 @@ module RdbmsSampler
       @table_samples = {}
       @schemas = options[:schemas]
       @skip_tables = Set.new(options[:skip_tables] || [])
+      @full_tables = Set.new(options[:full_tables] || [])
       @computed = false
       @connection.execute 'SET SESSION TRANSACTION READ ONLY, ISOLATION LEVEL REPEATABLE READ'
       @connection.execute 'START TRANSACTION'
@@ -22,14 +23,20 @@ module RdbmsSampler
       end
       warn "Discovering tables in databases: #{quoted_schema_names.to_sentence}..."
       tables_without_views.each do |schema_name, table_name|
-        table_sample = TableSample.new(@connection, schema_name, table_name, @rows_per_table)
+        identifier = "#{schema_name}.#{table_name}"
+        full = @full_tables.include?(identifier)
+        table_sample = TableSample.new(@connection, schema_name, table_name, @rows_per_table, full: full)
         @table_samples[table_sample.identifier] = table_sample
       end
       return warn 'No tables found!' unless @table_samples.count > 0
       roots = @table_samples.values.reject { |ts| @skip_tables.include?(ts.identifier) }
       skipped = @table_samples.count - roots.count
-      warn "Sampling #{roots.count} tables (#{skipped} skipped as root)..." if skipped > 0
-      warn "Sampling #{roots.count} tables..." if skipped == 0
+      full = @full_tables.count
+      suffix = []
+      suffix << "#{skipped} skipped as root" if skipped > 0
+      suffix << "#{full} dumped in full" if full > 0
+      tag = suffix.empty? ? '' : " (#{suffix.join(', ')})"
+      warn "Sampling #{roots.count} tables#{tag}..."
       roots.map &:sample!
       warn 'Ensuring referential integrity...'
       begin
