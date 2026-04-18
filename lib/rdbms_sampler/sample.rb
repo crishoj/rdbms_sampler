@@ -10,6 +10,7 @@ module RdbmsSampler
       @rows_per_table = options[:rows_per_table] || 1000
       @table_samples = {}
       @schemas = options[:schemas]
+      @skip_tables = Set.new(options[:skip_tables] || [])
       @computed = false
       @connection.execute 'SET SESSION TRANSACTION READ ONLY, ISOLATION LEVEL REPEATABLE READ'
       @connection.execute 'START TRANSACTION'
@@ -25,8 +26,11 @@ module RdbmsSampler
         @table_samples[table_sample.identifier] = table_sample
       end
       return warn 'No tables found!' unless @table_samples.count > 0
-      warn "Sampling #{@table_samples.count} tables..."
-      @table_samples.values.map &:sample!
+      roots = @table_samples.values.reject { |ts| @skip_tables.include?(ts.identifier) }
+      skipped = @table_samples.count - roots.count
+      warn "Sampling #{roots.count} tables (#{skipped} skipped as root)..." if skipped > 0
+      warn "Sampling #{roots.count} tables..." if skipped == 0
+      roots.map &:sample!
       warn 'Ensuring referential integrity...'
       begin
         new_dependencies = 0

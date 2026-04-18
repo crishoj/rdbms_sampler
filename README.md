@@ -55,6 +55,11 @@ Options
     --rows NUM
         Number of rows to sample per table
 
+    --skip-tables NAMES
+        Comma-separated list of tables (in `schema.table` form) to skip as sample roots.
+        Skipped tables are not sampled directly, but rows will still be included if
+        they are referenced via foreign keys from other sampled rows.
+
     --log PATH
         Log queries to PATH
 

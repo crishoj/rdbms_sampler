@@ -25,7 +25,7 @@ module RdbmsSampler
     end
 
     def size
-      @sampled ? @sample.size : @size
+      @sample.size
     end
 
     def identifier
