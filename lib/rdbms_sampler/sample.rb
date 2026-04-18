@@ -50,12 +50,9 @@ module RdbmsSampler
         end
         warn " Discovered #{new_dependencies} new dependencies" if new_dependencies > 0
       end while new_dependencies > 0
-      warn 'Referential integrity obtained'
-
-      warn 'Final sample contains:'
-      @table_samples.values.each do |table_sample|
-        warn "  #{table_sample.size} row(s) from `#{table_sample.identifier}`"
-      end
+      total_rows = @table_samples.values.sum(&:size)
+      non_empty = @table_samples.values.count { |ts| ts.size > 0 }
+      warn "Referential integrity obtained: #{total_rows} rows across #{non_empty} tables"
       @computed = true
     end
 
@@ -68,7 +65,14 @@ module RdbmsSampler
 
     def to_sql
       compute! unless @computed
-      @table_samples.values.collect(&:to_sql) * "\n"
+      warn 'Generating SQL output...'
+      output = []
+      total = @table_samples.count
+      @table_samples.values.each_with_index do |ts, i|
+        warn "  [#{i + 1}/#{total}] #{ts.quoted_name} (#{ts.size} rows)" if ts.size > 0
+        output << ts.to_sql
+      end
+      output * "\n"
     end
 
     private
